@@ -6,29 +6,37 @@ public class PlayerMovement : MonoBehaviour
 {
     [Header("Player Movement")]
     [SerializeField]
-    private float hMovement, vMovement, playerSpeed, jumpForce, groundDistance;
+    private float playerSpeed, jumpForce, groundDistance;
 
     [SerializeField]
-    private float maxVerticalSpeed, maxHorizontalSpeed; //Default value in game is 10
+    private float maxSpeed; //Default value in game is 10
 
     [SerializeField]
     private bool canJump;
 
-    private Vector3 _x, _z, _movement, _moveDirection;
-
+    private Vector3 _x, _y;
     private Rigidbody _rigidBody;
+    private bool isMoving;
 
-    private void Start()
+    public InputManager inputManager;
+    
+    private Vector3 _movementForce;
+
+    private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
-        //hMovement = _inputMaster.PlayerInput.Sideways.ReadValue<float>();
-        //vMovement = _inputMaster.PlayerInput.Forward.ReadValue<float>();
-        hMovement = Input.GetAxisRaw("Horizontal");
-        vMovement = Input.GetAxisRaw("Vertical");
+        if (inputManager.movementVector.x <= 0 && inputManager.movementVector.y <= 0)
+        {
+            isMoving = false;
+        }
+        else
+        {
+            isMoving = true;
+        }
     }
 
     private void FixedUpdate()
@@ -39,44 +47,38 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
-        _x = transform.right * hMovement;
-        _z = transform.forward * vMovement;
+        _x = transform.forward * inputManager.movementVector.y;
+        _y = transform.right * inputManager.movementVector.x;
+        
+        _movementForce = (_x + _y).normalized * playerSpeed;
+        
+        _rigidBody.AddForce(_movementForce);
 
-        _movement = (_x + _z).normalized * playerSpeed;
+        Vector3 rbVelocity = _rigidBody.velocity;
 
-        _moveDirection = transform.forward * vMovement + transform.right * hMovement;
+        rbVelocity = Vector3.ClampMagnitude(rbVelocity, maxSpeed);
 
-        _rigidBody.AddForce(_movement);
+        _rigidBody.velocity = rbVelocity;
 
-        Vector3 velocity = _rigidBody.velocity;
-        float vertVelocity = velocity.y;
-
-        velocity.y = 0;
-
-        velocity = Vector3.ClampMagnitude(velocity, maxHorizontalSpeed);
-
-        velocity.y = vertVelocity;
-        _rigidBody.velocity = velocity;
-
-        if (canJump != true)
-        {
-            //playerSpeed = airSpeed;
-        }
-        else
-        {
-            //playerSpeed = defaultSpeed;
-        }
+        //if (canJump != true)
+        //{
+        //    //playerSpeed = airSpeed;
+        //}
+        //else
+        //{
+        //    //playerSpeed = defaultSpeed;
+        //}
     }
 
     public void Jump()
     {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            if (DetectingGround())
-            {
-                _rigidBody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
-            }
-        }
+        //if (Input.GetKey(KeyCode.Space))
+        //{
+        //    if (DetectingGround())
+        //    {
+        //        _rigidBody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        //    }
+        //}
     }
 
     private bool DetectingGround()
