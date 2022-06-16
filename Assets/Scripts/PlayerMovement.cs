@@ -14,17 +14,22 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private bool canJump;
 
-    private Vector3 _x, _y;
+    [SerializeField]
     private Rigidbody _rigidBody;
-    private bool isMoving;
 
     public InputManager inputManager;
+    public GameObject rbObject;
+    public GameObject launcherRef;
+
+    private Vector3 _x, _y;
+    private Vector3 spawnPosition;
+    private bool isMoving;
     
     private Vector3 _movementForce;
 
     private void Awake()
     {
-        _rigidBody = GetComponent<Rigidbody>();
+        spawnPosition = transform.position;
     }
 
     private void Update()
@@ -37,6 +42,10 @@ public class PlayerMovement : MonoBehaviour
         {
             isMoving = true;
         }
+
+        transform.position = rbObject.transform.position;
+
+        rbObject.transform.localRotation = Quaternion.Euler(0, launcherRef.transform.rotation.eulerAngles.y, 0);
     }
 
     private void FixedUpdate()
@@ -47,8 +56,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
-        _x = transform.forward * inputManager.movementVector.y;
-        _y = transform.right * inputManager.movementVector.x;
+        // Get forward vector from camera and multiply by movementVector, making the player move towards where it is aiming according to its input
+        _x = rbObject.transform.forward * inputManager.movementVector.y;
+        _y = rbObject.transform.right * inputManager.movementVector.x;
         
         _movementForce = (_x + _y).normalized * playerSpeed;
         
@@ -79,6 +89,11 @@ public class PlayerMovement : MonoBehaviour
         //        _rigidBody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
         //    }
         //}
+    }
+
+    public void ResetPos()
+    {
+        rbObject.transform.position = spawnPosition;
     }
 
     private bool DetectingGround()

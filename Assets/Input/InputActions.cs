@@ -70,6 +70,17 @@ public partial class @InputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": """",
+                    ""id"": ""49231ce3-158b-4374-b138-f10c7720cd2c"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
                     ""name"": ""Gamepad"",
                     ""id"": ""fe852319-b2a0-414a-8ba0-9d1b7ffca2f6"",
                     ""path"": ""2DVector"",

@@ -6,40 +6,34 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     private InputActions _inputActions;
-    private InputAction _movement;
-    public InputAction _fire;
+    public InputAction movement;
+    public InputAction fire;
 
     public Vector2 movementVector;
 
     private void Awake()
     {
         _inputActions = new InputActions();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void OnEnable()
     {
-        _movement = _inputActions.Movement.Movement;
-        _movement.Enable();
+        movement = _inputActions.Movement.Movement;
+        movement.Enable();
 
-        _fire = _inputActions.Movement.Fire;
-        _fire.Enable();
-        _fire.performed += Fire;
+        fire = _inputActions.Movement.Fire;
+        fire.Enable();
     }
 
     private void OnDisable()
     {
-        _movement.Disable();
-        _fire.Disable();
+        movement.Disable();
+        fire.Disable();
     }
 
     private void Update()
     {
-        movementVector = _movement.ReadValue<Vector2>();
-        Debug.Log(movementVector);
-    }
-
-    public virtual void Fire(InputAction.CallbackContext context)
-    {
-        Debug.Log("fired");
+        movementVector = movement.ReadValue<Vector2>();
     }
 }
