@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Pivot
   - Rocket
+  - PlayerBody
   layers:
   - Default
   - TransparentFX

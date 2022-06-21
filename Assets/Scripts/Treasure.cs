@@ -9,6 +9,7 @@ public class Treasure : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             gameObject.SetActive(false);
+            GameObject.FindGameObjectWithTag("PlayerBody").GetComponent<PlayerPickup>().Score();
         }
     }
 }

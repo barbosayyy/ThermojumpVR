@@ -26,7 +26,7 @@ public class InputManager : MonoBehaviour
         fire.Enable();
     }
 
-    private void OnDisable()
+    public void Disable()
     {
         movement.Disable();
         fire.Disable();

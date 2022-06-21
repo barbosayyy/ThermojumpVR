@@ -1,11 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerPickup : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    public int score;
+    public TMPro.TextMeshProUGUI scoreText;
+
+    public void Score()
     {
-        //treasure collision
+        score++;
+        SetScoreText();
+    }
+
+    private void SetScoreText()
+    {
+        scoreText.text = score + "/3";
     }
 }
